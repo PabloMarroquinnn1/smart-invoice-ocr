@@ -70,13 +70,13 @@ La sección **"Reportes"** ofrece cuatro opciones para generar y compartir infor
 
 ### Reporte PDF generado
 
-![Reporte PDF](imgs/ReportePDF.png)
+![Reporte PDF](../images/ReportePDF.png)
 
 ### Reporte enviado por correo
 
 Al presionar **"Email"** se le pide el correo destino y el formato. El sistema genera el reporte y lo envía automáticamente.
 
-![Reporte por Gmail](imgs/Reporte%20Gmail.png)
+![Reporte por Gmail](../images/ReporteGmail.png)
 
 ## 8. Automatización RPA
 
@@ -90,7 +90,7 @@ Todo queda registrado en la bitácora con la acción `RPA_REGISTRO_AUTOMATICO`.
 
 La sección **"Bitácora"** muestra el historial completo de todas las acciones del sistema en orden cronológico. Cada registro incluye fecha/hora, tipo de acción, documento involucrado, estado (éxito o error) y descripción del resultado.
 
-![Bitácora](imgs/Bitacora.png)
+![Bitácora](../images/Bitacora.png)
 
 Las acciones registradas incluyen: registro de usuarios, inicio de sesión, carga de facturas, procesamiento OCR, generación de reportes, envío de correos y ejecuciones RPA.
 
