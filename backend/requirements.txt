@@ -1,0 +1,12 @@
+fastapi
+uvicorn
+sqlalchemy
+pydantic
+python-multipart
+PyJWT
+opencv-python-headless
+pytesseract
+PyMuPDF
+fpdf2
+openpyxl
+selenium
