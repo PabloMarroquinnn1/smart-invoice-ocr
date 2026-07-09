@@ -1,0 +1,15 @@
+services:
+  smartinvoice:
+    build: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - uploads_data:/app/backend/uploads
+      - db_data:/app/backend/data
+    env_file:
+      - .env
+    restart: unless-stopped
+
+volumes:
+  uploads_data:
+  db_data:
