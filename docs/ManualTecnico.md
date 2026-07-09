@@ -23,7 +23,7 @@ Se implementó el patrón de arquitectura **MVC (Modelo-Vista-Controlador)** con
 ### 2.2 Estructura de Archivos
 
 ```
-smartinvoice/
+smart-invoice-ocr/
 ├── backend/
 │   ├── main.py                  # Punto de entrada FastAPI
 │   ├── database.py              # Conexión a la BD (SQLAlchemy)
