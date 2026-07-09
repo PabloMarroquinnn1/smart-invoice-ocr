@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartInvoice</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<div id="login-page" class="login-container">
+    <div class="login-box">
+        <h1>SmartInvoice</h1>
+        <p>Sistema inteligente de procesamiento de facturas</p>
+        <div id="login-alert"></div>
+        <div id="login-form">
+            <input type="text" id="login-user" placeholder="Usuario">
+            <input type="password" id="login-pass" placeholder="Contraseña">
+            <button onclick="doLogin()">Iniciar sesión</button>
+            <div class="toggle">¿No tenés cuenta? <a onclick="showRegister()">Registrate</a></div>
+        </div>
+        <div id="register-form" style="display:none">
+            <input type="text" id="reg-user" placeholder="Usuario">
+            <input type="password" id="reg-pass" placeholder="Contraseña">
+            <input type="text" id="reg-nombre" placeholder="Nombre completo">
+            <input type="email" id="reg-email" placeholder="Correo electrónico">
+            <button onclick="doRegister()">Crear cuenta</button>
+            <div class="toggle">¿Ya tenés cuenta? <a onclick="showLogin()">Iniciá sesión</a></div>
+        </div>
+    </div>
+</div>
+
+<div id="app" class="app">
+    <nav class="sidebar">
+        <h2>SmartInvoice</h2>
+        <a href="#" onclick="showSection('dashboard')" class="active" id="nav-dashboard">Dashboard</a>
+        <a href="#" onclick="showSection('facturas')" id="nav-facturas">Facturas</a>
+        <a href="#" onclick="showSection('upload')" id="nav-upload">Cargar factura</a>
+        <a href="#" onclick="showSection('proveedores')" id="nav-proveedores">Proveedores</a>
+        <a href="#" onclick="showSection('reportes')" id="nav-reportes">Reportes</a>
+        <a href="#" onclick="showSection('bitacora')" id="nav-bitacora">Bitácora</a>
+        <button class="logout" onclick="doLogout()">Cerrar sesión</button>
+    </nav>
+
+    <div class="main">
+        <div id="sec-dashboard" class="section active">
+            <div class="page-header"><h2>Dashboard</h2></div>
+            <div class="stats">
+                <div class="stat-card"><div class="label">Facturas procesadas</div><div class="value blue" id="stat-total">0</div></div>
+                <div class="stat-card"><div class="label">Monto total (Q)</div><div class="value green" id="stat-monto">0.00</div></div>
+                <div class="stat-card"><div class="label">Proveedores</div><div class="value" id="stat-proveedores">0</div></div>
+                <div class="stat-card"><div class="label">Con error</div><div class="value red" id="stat-errores">0</div></div>
+            </div>
+            <div class="card">
+                <h3>Últimas facturas</h3>
+                <table><thead><tr><th>No. Factura</th><th>Proveedor</th><th>Fecha</th><th>Total</th><th>Estado</th></tr></thead>
+                <tbody id="dash-facturas"></tbody></table>
+            </div>
+        </div>
+
+        <div id="sec-facturas" class="section">
+            <div class="page-header"><h2>Facturas procesadas</h2></div>
+            <div class="card">
+                <table><thead><tr><th>No. Factura</th><th>Proveedor</th><th>NIT</th><th>Fecha</th><th>Subtotal</th><th>IVA</th><th>Total</th><th>Estado</th><th>Acciones</th></tr></thead>
+                <tbody id="facturas-table"></tbody></table>
+            </div>
+        </div>
+
+        <div id="sec-upload" class="section">
+            <div class="page-header"><h2>Cargar factura</h2></div>
+            <div class="card">
+                <div id="upload-alert"></div>
+                <div class="upload-zone" id="upload-zone" onclick="document.getElementById('file-input').click()">
+                    <div class="icon">📄</div>
+                    <p><strong>Hacé click o arrastrá</strong> tu factura aquí</p>
+                    <p class="hint">PDF, JPG, JPEG o PNG</p>
+                    <input type="file" id="file-input" accept=".pdf,.jpg,.jpeg,.png" onchange="uploadFile(this.files[0])">
+                </div>
+                <div class="upload-processing" id="upload-processing"><div class="spinner"></div><p>Procesando factura con OCR...</p></div>
+                <div id="upload-result" style="display:none"></div>
+            </div>
+        </div>
+
+        <div id="sec-proveedores" class="section">
+            <div class="page-header">
+                <h2>Proveedores</h2>
+                <button class="btn btn-primary" onclick="openProveedorModal()">+ Nuevo proveedor</button>
+            </div>
+            <div class="card">
+                <table><thead><tr><th>Nombre</th><th>NIT</th><th>Dirección</th><th>Teléfono</th><th>Email</th><th>Acciones</th></tr></thead>
+                <tbody id="proveedores-table"></tbody></table>
+            </div>
+        </div>
+
+        <div id="sec-reportes" class="section">
+            <div class="page-header"><h2>Reportes y automatización</h2></div>
+            <div class="stats">
+                <div class="stat-card" style="cursor:pointer" onclick="descargarReporte('pdf')">
+                    <div class="label">Descargar reporte</div>
+                    <div class="value blue" style="font-size:18px">📋 PDF</div>
+                </div>
+                <div class="stat-card" style="cursor:pointer" onclick="descargarReporte('excel')">
+                    <div class="label">Descargar reporte</div>
+                    <div class="value green" style="font-size:18px">📊 Excel</div>
+                </div>
+                <div class="stat-card" style="cursor:pointer" onclick="descargarReporte('csv')">
+                    <div class="label">Descargar reporte</div>
+                    <div class="value" style="font-size:18px">📄 CSV</div>
+                </div>
+                <div class="stat-card" style="cursor:pointer" onclick="enviarReporteEmail()">
+                    <div class="label">Enviar por correo</div>
+                    <div class="value red" style="font-size:18px">📧 Email</div>
+                </div>
+            </div>
+            <div class="card">
+                <h3>Formulario RPA simulado</h3>
+                <p style="color:#888;font-size:13px;margin-bottom:12px">Seleccione una factura desde la sección "Facturas" y presione el botón "RPA" para automatizar el registro en el formulario simulado.</p>
+                <a href="/api/reportes/rpa/form" target="_blank" class="btn btn-primary">Ver formulario simulado</a>
+            </div>
+        </div>
+
+        <div id="sec-bitacora" class="section">
+            <div class="page-header"><h2>Bitácora de procesamiento</h2></div>
+            <div class="card">
+                <table><thead><tr><th>Fecha/Hora</th><th>Acción</th><th>Documento</th><th>Estado</th><th>Resultado</th></tr></thead>
+                <tbody id="bitacora-table"></tbody></table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal-overlay" id="modal-proveedor">
+    <div class="modal">
+        <h3 id="modal-prov-title">Nuevo proveedor</h3>
+        <input type="hidden" id="prov-id">
+        <label>Nombre *</label><input type="text" id="prov-nombre" placeholder="Nombre del proveedor">
+        <label>NIT *</label><input type="text" id="prov-nit" placeholder="1234567-8">
+        <label>Dirección</label><input type="text" id="prov-direccion" placeholder="Dirección">
+        <label>Teléfono</label><input type="text" id="prov-telefono" placeholder="Teléfono">
+        <label>Email</label><input type="email" id="prov-email" placeholder="correo@ejemplo.com">
+        <div class="actions"><button class="btn btn-cancel" onclick="closeModal('modal-proveedor')">Cancelar</button><button class="btn btn-primary" onclick="saveProveedor()">Guardar</button></div>
+    </div>
+</div>
+
+<div class="modal-overlay" id="modal-factura">
+    <div class="modal modal-wide">
+        <h3>Detalle de factura</h3>
+        <div id="factura-detail"></div>
+        <div class="actions"><button class="btn btn-cancel" onclick="closeModal('modal-factura')">Cerrar</button></div>
+    </div>
+</div>
+
+<script src="js/app.js"></script>
+</body>
+</html>
